@@ -1,13 +1,12 @@
 import enum as _enum
 import string as _string
-from typing import Any
 
 from . import auth as _auth
 from . import helper as _helper
 from . import url as _url
+from . import logger as _logger
 
 import requests
-
 
 class Method(_enum.Enum):
   GET = "GET"
@@ -38,8 +37,14 @@ def method(
     request_method: Method,
     uri: str,
     **kwargs
-) -> Any:
+) -> requests.Response:
   preq = request(request_method, uri, **kwargs)
-  with requests.Session() as s:
-    resp = s.send(preq)
-  return resp.json()
+  try:
+    with requests.Session() as s:
+      resp = s.send(preq)
+    if _logger.fn:
+      _logger.fn(preq, resp)
+    return resp.json()
+  except:
+    return {}
+

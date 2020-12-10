@@ -10,5 +10,6 @@ from . import push_notification
 from . import coupon
 from . import setting
 from . import member
+from . import message
 from . import item_mapping
-
+from . import logger
